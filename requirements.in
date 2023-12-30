@@ -1,0 +1,8 @@
+PyPDF2
+reportlab
+cherrypy
+nltk
+
+pre-commit
+black
+isort

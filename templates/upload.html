@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Upload PDF Word Index Creator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-center items-center h-full">
+    <div class="flex flex-col gap-3 bg-white shadow-cyan-500 shadow-2xl rounded-lg max-w-xs border border-blue-500 p-6 text-center">
+        <input class="border rounded border-blue-300 focus:border-blue-400 p-2" id="fileInput" type="file" name="file" />
+        <input class="p-2 rounded bg-blue-500 text-white cursor-pointer disabled:bg-blue-400" id="uploadButton" type="submit" value="Upload File" />
+    </div>
+    <script>
+        $('#uploadButton').click(function () {
+            var fileInput = $('#fileInput')[0];
+            var formData = new FormData();
+
+            if (fileInput.files.length > 0) {
+                var uploadButton = $('#uploadButton');
+                uploadButton.prop('value', 'Loading...');
+                uploadButton.prop('disabled', true);
+
+                formData.append('file', fileInput.files[0]);
+
+                $.ajax({
+                    url: '/upload',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        var blob = new Blob([response], { type: 'application/octet-stream' });
+                        var downloadLink = document.createElement('a');
+                        downloadLink.href = window.URL.createObjectURL(blob);
+                        downloadLink.download = 'pdf_word_index.pdf';
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+
+
+                        uploadButton.prop('value', 'Upload File');
+                        uploadButton.prop('disabled', false);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('Upload failed: ' + textStatus, errorThrown);
+                        uploadButton.prop('value', 'Upload File');
+                        uploadButton.prop('disabled', false);
+                    },
+                });
+            }
+        });
+    </script>
+</body>
+</html>
