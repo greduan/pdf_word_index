@@ -16,7 +16,8 @@ it generates the output [docs/output.pdf][output].
 
 ## Setup
 
-Requirements: `pyenv` installed
+Requirements: `pyenv` installed, and Python version in `.python-version`
+installed with pyenv.
 
 ```shell
 make setup
@@ -27,7 +28,7 @@ make install
 
 ```shell
 . venv/bin/activate
-HOST='127.0.0.1' PORT='8080' python app.py
+HOST='127.0.0.1' PORT='8080' PDF_WORD_INDEX_PASSWORD='asdf' python app.py
 ```
 
 ## Env vars
